@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RunnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', function () {
-    return 'Docker works!';
-});
+// POST
+Route::post('/runner', 'RunnerController@create');
+
+/*Route::get('/{competence}', 'CompetenceController@getCompetence')->where('competence', '[0-9]{4}-[0-9]{1,2}');*/
