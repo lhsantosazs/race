@@ -30,7 +30,7 @@ class RaceService
      * @param Race $race
      * @return Array
     */
-    protected function save(Race $race)
+    protected function save(Race $race) : array
     {
         $saved = $race->save();
 
@@ -38,5 +38,15 @@ class RaceService
             'msg' => $saved ? self::SAVED : self::FAIL,
             'race' => $race
         ];
+    }
+
+    /**
+     * Filter by race id
+     * @param Int $race_id
+     * @return Array
+    */
+    public function filterByRaceId(Int $race_id) : array
+    {
+        return Race::filterByRaceId($race_id)->get()->toArray();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\RaceRunner;
 use App\Models\Race;
+use App\Services\RaceService;
 use Carbon\Carbon;
 
 class RaceRunnerService
@@ -11,6 +12,15 @@ class RaceRunnerService
     const INVALID_RACE_RUNNER = 'Erro ao cadastrar o mesmo corredor em duas provas diferentes na mesma data';
     const SAVED = 'Corredor salvo na corrida com sucesso';
     const FAIL = 'Falha ao salvar corredor na corrida';
+
+    /**
+     * Constructor to instantiate Request
+     * @param RaceService $raceService
+     */
+    public function __construct(RaceService $raceService)
+    {
+        $this->raceService = $raceService;
+    }
 
     /**
      * Create a raceRunner
@@ -22,15 +32,13 @@ class RaceRunnerService
         $runner_id = $params['runner_id'];
         $race_id = $params['race_id'];
 
-        $race = Race::filterByRaceId($race_id)->get()->toArray();
-
+        $race = $this->raceService->filterByRaceId($race_id);
         $newRaceDate = $race[0]['date'];
-        /*\DB::enableQueryLog();*/
-        $raceRunnerFound = RaceRunner::getRunnerRacesFilteringByDate($runner_id, $newRaceDate)->get()->toArray();
-        /*dd(\DB::getQueryLog());*/
+
+        $runnerRaces = $this->validadeRunnerRacesGivenADate($runner_id, $newRaceDate);
 
         //Validade existing race in the same date
-        if (!empty($raceRunnerFound)) {
+        if ($runnerRaces) {
             return ['msg' => self::INVALID_RACE_RUNNER];
         }
 
@@ -46,7 +54,7 @@ class RaceRunnerService
      * @param RaceRunner $raceRunner
      * @return Array
     */
-    protected function save(RaceRunner $raceRunner)
+    protected function save(RaceRunner $raceRunner) : array
     {
         $saved = $raceRunner->save();
 
@@ -57,14 +65,15 @@ class RaceRunnerService
     }
     
     /**
-     * Validade age greater than MIN
-     * @param string $age
+     * Validade runner races with same data
+     * @param Int $runner_id
+     * @param String $newRaceDate
      * @return bool
     */
-    protected function validadeAge(string $age) : bool
+    protected function validadeRunnerRacesGivenADate(Int $runner_id, string $newRaceDate) : bool
     {
-        $age = Carbon::createFromFormat("Y-m-d", $age)->age;
-
-        return $age >= self::MIN_AGE;
+        /*\DB::enableQueryLog();*/
+        return (!empty(RaceRunner::getRunnerRacesFilteringByDate($runner_id, $newRaceDate)->get()->toArray()));
+        /*dd(\DB::getQueryLog());*/
     }
 }

@@ -38,7 +38,7 @@ class RunnerService
      * @param Runner $runner
      * @return Array
     */
-    protected function save(Runner $runner)
+    protected function save(Runner $runner) : array
     {
         $saved = $runner->save();
 
