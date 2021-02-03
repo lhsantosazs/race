@@ -22,5 +22,6 @@ Route::get('/', function () {
 Route::post('/runner', 'RunnerController@create');
 Route::post('/race', 'RaceController@create');
 Route::post('/race-runner', 'RaceRunnerController@create');
+Route::post('/race-runner-results', 'RaceRunnerController@setResults');
 
 /*Route::get('/{competence}', 'CompetenceController@getCompetence')->where('competence', '[0-9]{4}-[0-9]{1,2}');*/

@@ -23,6 +23,19 @@ class RaceRunner extends Model
     }
 
     /**
+     * Scope to filter by race id
+     * @param Builder $query
+     * @param Int $raceId
+     * @return Builder $query
+     */
+    public function scopeFilterByRaceId(Builder $query, Int $raceId) : Builder
+    {
+        $query->where('race_id', $raceId);
+
+        return $query;
+    }
+
+    /**
      * Scope to get runner races
      * @param Builder $query
      * @param Int $runnerId
