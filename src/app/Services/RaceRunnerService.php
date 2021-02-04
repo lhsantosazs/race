@@ -106,4 +106,16 @@ class RaceRunnerService
         return (!empty(RaceRunner::getRunnerRacesFilteringByDate($runner_id, $newRaceDate)->get()->toArray()));
         /*dd(\DB::getQueryLog());*/
     }
+
+    /**
+     * Get valid results
+     * @return array
+    */
+    public function getValidResults() : array
+    {
+        /*\DB::enableQueryLog();*/
+        $results = RaceRunner::getValidResults()->get();
+        /*dd(\DB::getQueryLog());*/
+        return $results->toArray();
+    }
 }

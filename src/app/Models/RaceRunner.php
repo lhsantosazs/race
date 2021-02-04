@@ -52,6 +52,31 @@ class RaceRunner extends Model
     }
 
     /**
+     * Get valid results
+     * @param Builder $query
+     * @return Builder $query
+     */
+    public function scopeGetValidResults(Builder $query) : Builder
+    {
+        $query->select(
+            'race.id as race_id',
+            'race.type',
+            'race.date',
+            'runner.id as runner_id',
+            'runner.name',
+            'runner.birth_date',
+            'race_runner.race_start',
+            'race_runner.race_end'
+        )
+        ->leftJoin('race', 'race.id', '=', 'race_runner.race_id')
+        ->leftJoin('runner', 'runner.id', '=', 'race_runner.runner_id')
+        ->whereNotNull('race_runner.race_start')
+        ->whereNotNull('race_runner.race_end');
+
+        return $query;
+    }
+
+    /**
      * Scope to filter by race date
      * @param Builder $query
      * @param String $date
