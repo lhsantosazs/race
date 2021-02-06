@@ -27,4 +27,15 @@ class ClassificationController extends Controller
 
         return response()->json($classificationByAge);
     }
+
+    /**
+     * Get overall classification
+     * @return JsonResponse
+     */
+    public function overall() : JsonResponse
+    {
+        $classificationOverall = $this->classificationService->overall();
+
+        return response()->json($classificationOverall);
+    }
 }

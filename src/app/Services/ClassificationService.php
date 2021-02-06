@@ -51,6 +51,35 @@ class ClassificationService
     }
 
     /**
+     * Get overall classification
+     * @return array
+     */
+    public function overall() : array
+    {
+        $validResults = $this->raceRunnerService->getValidResults();
+        $finalResults = [];
+
+        foreach ($validResults as $result) {
+            $result['raceTimeInSeconds'] = $this->calcRaceTime($result);
+            $result['age'] = Carbon::createFromFormat("Y-m-d", $result['birth_date'])->age;
+
+            $finalResults[$result['type']][] = $result;
+        }
+
+        foreach ($finalResults as $indexType => $type) {
+            $this->sortByRaceTime($finalResults[$indexType]);
+        }
+
+        foreach ($finalResults as $indexType => $type) {
+            foreach ($type as $indexResult => $result) {
+                $finalResults[$indexType][$indexResult] = $this->format($result, $indexResult);
+            }
+        }
+
+        return $finalResults;
+    }
+
+    /**
      * Split by age
      * @param array &$finalResults
      * @param array $result
@@ -78,7 +107,7 @@ class ClassificationService
     */
     protected function sortByRaceTime(array &$finalResults)
     {
-        uasort($finalResults, function ($a, $b) {
+        usort($finalResults, function ($a, $b) {
             if ($a['raceTimeInSeconds'] == $b['raceTimeInSeconds']) {
                 return 0;
             }
