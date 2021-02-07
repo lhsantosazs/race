@@ -10,3 +10,14 @@ Race REST API
 * models in src/app/Models
 * services in src/app/Services
 * unit tests in src/tests/Unit
+
+# How to run
+
+* install docker
+* install docker-compose
+* git clone git@github.com:lhsantosazs/race.git
+* cp .env.example .env
+* cd src
+* docker-compose build
+*./console migrate
+* docker-compose start
