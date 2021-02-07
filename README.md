@@ -1,7 +1,7 @@
 # race
 Race REST API
 
-#Code distributions
+# Code distribution
 
 * migrations in src/database/migrations
 * routes in src/routes/web.php
