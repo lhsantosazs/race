@@ -67,7 +67,7 @@ class RaceRunnerService
             return ['msg' => self::INVALID_RACE_PERIOD];
         }
 
-        $raceRunner = RaceRunner::filterByRaceId($race_id)->filterByRunnerId($runner_id)->first();
+        $raceRunner = $this->getRaceRunner($race_id, $runner_id);
 
         if (!empty($raceRunner->race_start)) {
             return ['msg' => self::RACE_RESULTS_ALREADY_SAVED];
@@ -102,9 +102,7 @@ class RaceRunnerService
     */
     protected function validadeRunnerRacesGivenADate(Int $runner_id, string $newRaceDate) : bool
     {
-        /*\DB::enableQueryLog();*/
         return (!empty(RaceRunner::getRunnerRacesFilteringByDate($runner_id, $newRaceDate)->get()->toArray()));
-        /*dd(\DB::getQueryLog());*/
     }
 
     /**
@@ -113,9 +111,18 @@ class RaceRunnerService
     */
     public function getValidResults() : array
     {
-        /*\DB::enableQueryLog();*/
         $results = RaceRunner::getValidResults()->get();
-        /*dd(\DB::getQueryLog());*/
         return $results->toArray();
+    }
+
+    /**
+     * Get valid results
+     * @param Int $race_id
+     * @param Int $runner_id
+     * @return RaceRunner
+    */
+    protected function getRaceRunner(Int $race_id, Int $runner_id) : RaceRunner
+    {
+        return RaceRunner::filterByRaceId($race_id)->filterByRunnerId($runner_id)->first();
     }
 }

@@ -24,6 +24,7 @@ class ClassificationService
     public function byAge() : array
     {
         $validResults = $this->raceRunnerService->getValidResults();
+
         $finalResults = [];
 
         foreach ($validResults as $result) {
